@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TableFlipTestHelpers
+namespace VUHL.DaoTestTools
 {
     public class SpyMessageHandler : HttpClientHandler
     {
@@ -21,7 +21,6 @@ namespace TableFlipTestHelpers
             var response = await base.SendAsync(request, cancellationToken);
             HttpResponseMessages.Add(response);
             return response;
-
         }
     }
 }

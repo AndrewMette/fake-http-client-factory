@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Xml;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 
-namespace TableFlipTestHelpers
+namespace VUHL.DaoTestTools
 {
     public class FakeHttpClient : HttpClient
     {
         private FakeMessageHandler FakeMessageHandler { get; }
-        public FakeHttpClient(FakeMessageHandler fakeMessageHandler) : base(fakeMessageHandler)
+        internal FakeHttpClient(FakeMessageHandler fakeMessageHandler) : base(fakeMessageHandler)
         {
             FakeMessageHandler = fakeMessageHandler;
+        }
+
+        public FakeHttpClient() : this(new FakeMessageHandler())
+        {
+
         }
 
         #region Queue Responses And Exceptions
@@ -33,6 +39,11 @@ namespace TableFlipTestHelpers
                 Content = new StringContent(json)
             };
             QueueResponse(response);
+        }
+
+        public void QueueResponseWithJsonContent(object content)
+        {
+            QueueResponseWithJsonContent(HttpStatusCode.OK, content);
         }
 
         public void QueueResponseWithXmlContent(HttpStatusCode statusCode, string xmlString)
@@ -65,6 +76,11 @@ namespace TableFlipTestHelpers
         public void QueueException(Exception exception) => FakeMessageHandler.Exceptions.Enqueue(exception);
         #endregion
 
-        public IEnumerable<HttpRequestMessage> GetRequests() => FakeMessageHandler.Requests;
+        public IEnumerable<HttpRequestMessage> GetRequests(HttpMethod method = null)
+        {
+            return method == null 
+                ? FakeMessageHandler.Requests 
+                : FakeMessageHandler.Requests.Where(request => request.Method == method);
+        }
     }
 }

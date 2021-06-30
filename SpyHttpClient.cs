@@ -1,14 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 
-namespace TableFlipTestHelpers
+namespace VUHL.DaoTestTools
 {
     public class SpyHttpClient : HttpClient
     {
         private SpyMessageHandler SpyMessageHandler { get; }
-        public SpyHttpClient(SpyMessageHandler spyMessageHandler) : base(spyMessageHandler)
+        internal SpyHttpClient(SpyMessageHandler spyMessageHandler) : base(spyMessageHandler)
         {
             SpyMessageHandler = spyMessageHandler;
+        }
+
+        public SpyHttpClient() : this(new SpyMessageHandler())
+        {
+
         }
 
         public List<HttpRequestMessage> GetRequestMessages()

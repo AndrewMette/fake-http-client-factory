@@ -1,7 +1,8 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 
-namespace TableFlipTestHelpers
+namespace VUHL.DaoTestTools
 {
     public class SpyHttpClientFactory : IHttpClientFactory
     {
@@ -21,6 +22,16 @@ namespace TableFlipTestHelpers
         public HttpClient CreateClient(string name)
         {
             return SpyHttpClient;
+        }
+
+        public List<HttpRequestMessage> GetRequestMessages()
+        {
+            return SpyHttpClient.GetRequestMessages();
+        }
+
+        public List<HttpResponseMessage> GetResponseMessages()
+        {
+            return SpyHttpClient.GetResponseMessages();
         }
     }
 }
